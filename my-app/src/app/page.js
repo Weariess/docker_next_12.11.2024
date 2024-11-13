@@ -55,7 +55,7 @@ const logout = async()=>{
     {user?
     <>
     <DropdownMenuItem asChild><Button onClick={logout}>wyloguj</Button></DropdownMenuItem>
-    <DropdownMenuItem asChild><AvUser>Ustawienia</AvUser></DropdownMenuItem>
+    <DropdownMenuItem asChild><AvUser user={user} setUser={setUser}>Ustawienia</AvUser></DropdownMenuItem>
     </>
     :
     <DropdownMenuItem asChild><LoginForm onLogin={login}>logowanie</LoginForm></DropdownMenuItem>

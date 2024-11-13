@@ -23,13 +23,31 @@ import {
 
 import Link from "next/link";
 import { LoginForm } from "@/components/loginForm";
-
+import Edit from "@/components/editpost";
+import Delete from "@/components/delposts";
 
 const pb = new PocketBase('http://172.16.15.167:8080');
 
 export default function Home() {
 
   const [user,setUser]=useState(null)
+  const [posts,setPosts]=useState(null)
+  useEffect(()=>{
+    const getData = async ()=>{
+      try{
+        const records = await pb.collection('posts').getFullList({
+          sort: '-created',
+      });
+      console.log(records)
+      setPosts(records)
+      }catch(err){
+        console.log(err)
+      }finally{
+
+      }
+    }
+    getData()
+  },[])
   useEffect(()=>{
       setUser(pb.authStore.model)
       console.log(pb.authStore.model)
@@ -42,23 +60,36 @@ const logout = async()=>{
   pb.authStore.clear();
   setUser(null)
 }
-//2 div to jest moja proba
+const updated = (item)=>{
+  console.log(item)
+
+    var index = null
+    var tmpPosty = [...posts]
+    for(let i in posts){
+      if(posts[i].id == item.id){
+        index = i
+      }
+    }
+    tmpPosty[index] = item
+    console.log(item)
+    setPosts(tmpPosty)
+    console.log("index: " + index)
+  
+}
+const deleted = (id)=>{
+  setPosts((prev)=>(
+    prev.filter((ele)=>{
+      return ele.id != id 
+    })
+  ))
+}
+
+
   return(
     <div>
       <div className="flex flex-row gap-2">
             <Link href=".">Strona1</Link>
             {user?<Link href="/strona2">Strona2</Link>:"Strona2"}
-            <h1>STRONA2</h1>
-        </div>
-        <Card className='w-[300px]'>
-          <CardTitle>Projekt</CardTitle>
-          <CardContent>Opis</CardContent>
-          <CardFooter>nazwa uzytkownika</CardFooter>
-        </Card>
-        
-        <div className="flex flex-row gap-2">
-
-
         </div>
     <div className="flex flex-row justify-end items-end">
     <DropdownMenu>
@@ -74,7 +105,7 @@ const logout = async()=>{
     {user?
     <>
     <DropdownMenuItem asChild><Button onClick={logout}>wyloguj</Button></DropdownMenuItem>
-    <DropdownMenuItem asChild><AvUser>Ustawienia</AvUser></DropdownMenuItem>
+    <DropdownMenuItem asChild><AvUser user={user} setUser={setUser}>Ustawienia</AvUser></DropdownMenuItem>
     </>
     :
     <DropdownMenuItem asChild><LoginForm onLogin={login}>logowanie</LoginForm></DropdownMenuItem>
@@ -85,6 +116,25 @@ const logout = async()=>{
 
       
     </div>
+    {user && 
+      <div className="flex justify-center w-full flex-wrap gap-5">
+          {posts && posts.map((post)=>(
+            <Card key={post.id}>
+            <CardHeader>
+              <CardTitle>{post.tytul}</CardTitle>
+              <CardDescription></CardDescription>
+            </CardHeader>
+            <CardContent>
+              {post.opis}
+            </CardContent>
+            <CardFooter>
+              {user.id==post.autor?<><Edit item={post} onupdated={updated}/><Delete id={post.id} ondeleted={deleted}/></>:";)"}
+              
+            </CardFooter>
+          </Card>
+          ))}
+        </div>
+    }
     </div>
   )
 }
