@@ -15,7 +15,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"  
-const pb = new PocketBase('http://192.168.0.136:8080');
+const pb = new PocketBase('http://172.16.15.167:8080');
 export default function AvUser(){
     const [user,setUser] = useState(null)
     const [open,setOpen]=useState(false)
@@ -36,6 +36,7 @@ export default function AvUser(){
         const record = await pb.collection('users').update(user.id,formData);
         console.log(record)
         setOpen()
+        window.location.reload()
     }catch(err){
         console.log(err)
     }
@@ -47,7 +48,7 @@ return(
   <AlertDialogTrigger asChild><Button variant="outline">Ustawienia</Button></AlertDialogTrigger>
   <AlertDialogContent>
     <AlertDialogHeader>
-      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+      <AlertDialogTitle>Zmień avatar</AlertDialogTitle>
       <AlertDialogDescription>
       <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label htmlFor='zdjecie'>

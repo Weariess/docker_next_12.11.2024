@@ -16,7 +16,7 @@ import Link from "next/link";
 import { LoginForm } from "@/components/loginForm";
 
 
-const pb = new PocketBase('http://192.168.0.136:8080');
+const pb = new PocketBase('http://172.16.15.167:8080');
 
 export default function Home() {
 
@@ -39,6 +39,7 @@ const logout = async()=>{
       <div className="flex flex-row gap-2">
             <Link href=".">Strona1</Link>
             {user?<Link href="/strona2">Strona2</Link>:"Strona2"}
+            <h1>STRONA1</h1>
         </div>
     <div className="flex flex-row justify-end items-end">
     <DropdownMenu>
