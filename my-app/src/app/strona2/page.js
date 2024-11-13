@@ -20,6 +20,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Heart } from 'lucide-react';
 
 import Link from "next/link";
 import { LoginForm } from "@/components/loginForm";
@@ -127,8 +128,8 @@ const deleted = (id)=>{
             <CardContent>
               {post.opis}
             </CardContent>
-            <CardFooter>
-              {user.id==post.autor?<><Edit item={post} onupdated={updated}/><Delete id={post.id} ondeleted={deleted}/></>:";)"}
+            <CardFooter className="gap-2">
+              {user.id==post.autor?<><Edit item={post} onupdated={updated}/><Delete id={post.id} ondeleted={deleted}/></>:<Heart strokeWidth={2.5} />}
               
             </CardFooter>
           </Card>
